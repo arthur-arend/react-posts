@@ -1,4 +1,14 @@
-const PostItem = ({ post, onEdit, onDelete }) => {
+import { IPost } from "../domain/interfaces/IPost.interface";
+
+const PostItem = ({
+  post,
+  onEdit,
+  onDelete,
+}: {
+  post: IPost;
+  onEdit: (post: IPost) => void;
+  onDelete: (postId: number) => void;
+}) => {
   return (
     <div className="p-4 bg-gray-50 border rounded-lg shadow-sm">
       <h2 className="text-xl font-bold text-gray-800">{post.title}</h2>
