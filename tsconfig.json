@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "esnext",
     "lib": ["dom", "dom.iterable", "esnext"],
-    "types": ["vite/client"],
+    "types": ["vitest/globals"],
     "allowJs": true,
     "jsx": "react-jsx",
     "esModuleInterop": true,

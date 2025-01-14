@@ -1,5 +1,5 @@
-import { IPost } from "../domain/interfaces/IPost.interface";
-import PostItem from "./PostItem";
+import { IPost } from "../../domain/interfaces/IPost.interface";
+import PostItem from "../PostItem/PostItem";
 
 const PostList = ({
   posts,
@@ -11,7 +11,7 @@ const PostList = ({
   onDelete: (postId: number) => void;
 }) => {
   return (
-    <div className="space-y-4">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
       {posts.map((post) => (
         <PostItem
           key={post.id}
