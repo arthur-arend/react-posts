@@ -6,11 +6,11 @@ const api = axios.create({
   baseURL: "https://jsonplaceholder.typicode.com",
 });
 
-export const getPosts = async (setPosts: (post: IPost[]) => void) => {
+export const getPosts = async (pagination: number) => {
   try {
-    const response = await api.get("/posts?_page=1");
+    const response = await api.get(`/posts?_page=${pagination}`);
     if (response.data) {
-      setPosts(response.data);
+      return response.data;
     }
   } catch (error) {
     console.error(error);

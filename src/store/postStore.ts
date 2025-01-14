@@ -8,6 +8,8 @@ interface IPostStore {
   setEditingPost: (post: IPost | null) => void;
   loading: boolean;
   setLoading: (loading: boolean) => void;
+  pagination: number;
+  setPagination: (pagination: number) => void;
 }
 
 export const usePostStore = create<IPostStore>((set) => ({
@@ -17,4 +19,6 @@ export const usePostStore = create<IPostStore>((set) => ({
   setEditingPost: (editingPost) => set({ editingPost }),
   loading: false,
   setLoading: (loading) => set({ loading }),
+  pagination: 1,
+  setPagination: (pagination) => set({ pagination }),
 }));

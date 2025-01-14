@@ -12,17 +12,43 @@ import {
 import { usePostStore } from "./store/postStore";
 
 export function App() {
-  const { posts, setPosts, editingPost, setEditingPost, loading, setLoading } =
-    usePostStore();
+  const {
+    posts,
+    setPosts,
+    editingPost,
+    setEditingPost,
+    loading,
+    setLoading,
+    pagination,
+    setPagination,
+  } = usePostStore();
 
   useEffect(() => {
-    const fetchInitialPosts = async () => {
+    const fetchPosts = async () => {
       setLoading(true);
-      await getPosts(setPosts);
+      await getPosts(pagination).then((data) => setPosts([...posts, ...data]));
       setLoading(false);
     };
-    fetchInitialPosts();
-  }, [setPosts]);
+    fetchPosts();
+  }, [pagination]);
+
+  useEffect(() => {
+    const intersectionObserver = new IntersectionObserver((entries) => {
+      if (entries.some((entry) => entry.isIntersecting)) {
+        const currentPagination = usePostStore.getState().pagination;
+        setPagination(currentPagination + 1);
+      }
+    });
+
+    const sentinel = document.querySelector("#sentinela");
+    if (sentinel) {
+      intersectionObserver.observe(sentinel);
+    } else {
+      console.warn("Sentinela element not found");
+    }
+
+    return () => intersectionObserver.disconnect();
+  }, []);
 
   const handleCreatePost = async (data: IPost) => {
     if (!data.title.trim() || !data.body.trim()) {
@@ -32,7 +58,7 @@ export function App() {
     try {
       setLoading(true);
       await sendPost(data);
-      await getPosts(setPosts);
+      await getPosts(pagination);
     } finally {
       setLoading(false);
     }
@@ -46,7 +72,7 @@ export function App() {
     try {
       setLoading(true);
       await editPost(id, data);
-      await getPosts(setPosts);
+      await getPosts(pagination);
       setEditingPost(null);
     } finally {
       setLoading(false);
@@ -57,7 +83,7 @@ export function App() {
     try {
       setLoading(true);
       await deletePost(id);
-      await getPosts(setPosts);
+      await getPosts(pagination);
     } finally {
       setLoading(false);
     }
@@ -103,6 +129,7 @@ export function App() {
           onDelete={handleDeletePost}
         />
       </div>
+      <li className="w-full h-1 opacity-0" id="sentinela"></li>
     </div>
   );
 }
